@@ -1,0 +1,29 @@
+<h1>Events</h1>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+<ul id="content">no event found</ul>
+
+<script>
+var socket = io.connect('http://localhost:3000');
+socket.on('event', function () {
+    loadEvents()
+})
+
+function loadEvents() {
+    $.get(  'http://localhost:3000/notifications', function( data ) {
+        var events = JSON.parse(data)
+        if(events.length > 0) {
+            $('#content').empty()
+        }
+        for(var i=0; i<events.length; ++i) {
+            var event = events[i]
+            var eventString = JSON.stringify(event)
+            $('#content').append('<li>'+eventString+'</li>')
+        }
+    })
+}
+
+loadEvents()
+</script>
